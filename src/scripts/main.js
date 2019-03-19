@@ -1,11 +1,14 @@
 const outEl = document.querySelector("#output");
 const allButton = document.createElement("button");
 const manuButton = document.createElement("button");
+const agentButton = document.createElement("button");
 const header = document.querySelector("#header");
 allButton.textContent = "All Businesses";
 manuButton.textContent = "Manufacturing Businesses";
+agentButton.textContent = "Agents";
 header.appendChild(allButton);
 header.appendChild(manuButton);
+header.appendChild(agentButton);
 
 
 const getAllBiz = () => {
@@ -62,5 +65,23 @@ const getManufacturingBiz = () => {
 
 }
 
+const agents = businesses.map(business => {
+    let agentObj = {
+        fullName: `${business.purchasingAgent["nameFirst"]}  ${business.purchasingAgent["nameLast"]}`,
+        company: business.companyName,
+        phoneNumber: business.phoneWork
+    }
+    return agentObj;
+});
+
+const getAgents = () => {
+    outEl.innerHTML = "<h1>Purchasing Agents</h1>";
+    agents.forEach(agent => {
+        outEl.innerHTML += `<h2>${agent.fullName}, ${agent.company}, ${agent.phoneNumber}</h2>`;
+        outEl.innerHTML += "<hr/>";
+      });
+}
+
 allButton.addEventListener("click", getAllBiz);
 manuButton.addEventListener("click", getManufacturingBiz);
+agentButton.addEventListener("click", getAgents);
