@@ -2,13 +2,16 @@ const outEl = document.querySelector("#output");
 const allButton = document.createElement("button");
 const manuButton = document.createElement("button");
 const agentButton = document.createElement("button");
+const sumButton = document.createElement("button");
 const header = document.querySelector("#header");
 allButton.textContent = "Show All Businesses";
 manuButton.textContent = "Show Manufacturing Businesses";
 agentButton.textContent = "Show Purchasing Agents";
+sumButton.textContent = "Show Order Sums";
 header.appendChild(allButton);
 header.appendChild(manuButton);
 header.appendChild(agentButton);
+header.appendChild(sumButton);
 
 
 const getAllBiz = () => {
@@ -84,7 +87,37 @@ const getAgents = () => {
     });
 }
 
+const getSum = () => {
+    outEl.innerHTML = "<h1>Order Sums</h1>";
+    businesses.forEach(business => {
+        /* CALCULATE ORDER SUMMARY */
+        // let totalOrders = 0;
 
+        // business.orders.forEach(order => totalOrders += order)
+        /* Another Way to write the forEach statemnent */
+        let totalOrders = business.orders.reduce(
+            (currentTotal, nextValue) => currentTotal + nextValue);
+
+        outEl.innerHTML += 
+        `
+            <h2>
+                ${business.companyName}
+                ($${totalOrders.toFixed(2)})
+            </h2>
+            <section>
+                ${business.addressFullStreet}
+            </section>
+            <section>
+                ${business.addressCity},
+                ${business.addressStateCode}
+                ${business.addressZipCode}
+            </section>
+        `;
+        outEl.innerHTML += "<hr/>";
+    })
+};
+
+sumButton.addEventListener("click", getSum);
 allButton.addEventListener("click", getAllBiz);
 manuButton.addEventListener("click", getManufacturingBiz);
 agentButton.addEventListener("click", getAgents);
@@ -132,13 +165,13 @@ document.querySelector("#companySearch")
     .addEventListener("keypress", keyPressEvent => {
         if (keyPressEvent.charCode === 13) {
             /* WHEN  USER PRESSES ENTER, FIND MATCHING PURCHASING         AGENT. FIND METHOD NEEDS TO RETURN A BOOLEAN. FIRST        RESULT THAT MATCHES THE SEARCH VALUE WILL APPEAR ON THE    DOM. INCLUDE METHOD IS A STRING METHOD THAT RETURNS A      BOOLEAN.
-            */
+             */
             const foundAgent = agentsList.find(
                 agent =>
-                agent.fullName.includes(keyPressEvent.target.value)
+                agent.fullName.toLowerCase().includes(keyPressEvent.target.value.toLowerCase())
             );
 
-        outEl.innerHTML = `
+            outEl.innerHTML = `
             <h2>
             ${foundAgent.fullName}
             </h2>
@@ -150,6 +183,18 @@ document.querySelector("#companySearch")
             </p>
             `;
 
-        document.querySelector("#companySearch").value = "";
+            document.querySelector("#companySearch").value = "";
         }
     });
+
+const monthlyRainfall = [23, 13, 27, 20, 20, 31, 33, 26, 19, 12, 14, 12, 10];
+
+const totalRainfall = monthlyRainfall.reduce((currentTotal, nextValue) => currentTotal += nextValue);
+    
+console.log(totalRainfall);
+
+const words = ["The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog"];
+
+const sentence = words.reduce((currentWord, nextWord) => currentWord + " " + nextWord);
+
+console.log(sentence);
