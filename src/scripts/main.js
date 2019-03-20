@@ -3,16 +3,18 @@ const allButton = document.createElement("button");
 const manuButton = document.createElement("button");
 const agentButton = document.createElement("button");
 const sumButton = document.createElement("button");
+const bigSpenderButton = document.createElement("button");
 const header = document.querySelector("#header");
 allButton.textContent = "Show All Businesses";
 manuButton.textContent = "Show Manufacturing Businesses";
 agentButton.textContent = "Show Purchasing Agents";
 sumButton.textContent = "Show Order Sums";
+bigSpenderButton.textContent = "Show Big Spenders";
 header.appendChild(allButton);
 header.appendChild(manuButton);
 header.appendChild(agentButton);
 header.appendChild(sumButton);
-
+header.appendChild(bigSpenderButton);
 
 const getAllBiz = () => {
     outEl.innerHTML = "<h1>Active Businesses</h1>";
@@ -198,3 +200,36 @@ const words = ["The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", 
 const sentence = words.reduce((currentWord, nextWord) => currentWord + " " + nextWord);
 
 console.log(sentence);
+
+
+// list only the companies that have placed an order for more than nine thousand dollars."
+
+// Use the filter method to get all the big spenders in the main array into a new one.
+
+// Array to contain all the big spenders
+const bigSpenders = businesses.filter(business => {
+    let isBigSpender = false;
+    business.orders.forEach(order => {
+        if(order > 9000) {
+            isBigSpender = true;
+        }
+    })
+    return isBigSpender;
+})
+
+const getBigSpenders = () => {
+    outEl.innerHTML = "<h1>Big Spenders</h1>";
+    bigSpenders.forEach(business => {
+        outEl.innerHTML += `
+        <h2>${business.companyName}</h2>
+        <section>
+          ${business.addressFullStreet}
+        </section>
+        <section>
+            ${business.addressCity}, ${business.addressStateCode}, ${business.addressZipCode}
+        </section>`;
+        outEl.innerHTML += "<hr/>";
+    })
+}
+
+bigSpenderButton.addEventListener("click", getBigSpenders);
